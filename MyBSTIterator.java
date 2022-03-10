@@ -1,3 +1,12 @@
+/**
+ * Name: Jialin Chen
+ * Email: jic053@ucsd.edu
+ * Sources used: comments from:
+ * https://docs.google.com/document/d/e/2PACX-1vT7pL-puGeW-r0YERAyPRqvHWbPLuVeVSYUjho64FKnyyQ99rYjwKRbfhloQXc7y9iDLaDdsBWGEs0f/pub#h.bz1b4mb6a8mf
+ * 
+ * this is a iterator file that points to the next node
+ * for MyBST and stores last visited node
+ */
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 
@@ -27,8 +36,19 @@ public class MyBSTIterator<K extends Comparable<K>, V> extends MyBST<K, V> {
         }
 
         MyBSTNode<K, V> nextNode() {
-            // TODO
-            return null;
+            if(!hasNext())
+                throw new NoSuchElementException();
+            
+            if(lastVisited == null) {
+                lastVisited = this.next;
+                this.next = next.successor();
+                return next.predecessor();
+            }
+            MyBSTNode<K,V> lastNode = new MyBSTNode<K,V>(lastVisited.getKey(), 
+            lastVisited.getValue(), lastVisited.getParent());
+            lastVisited = this.next;
+            this.next = next.successor();
+            return lastNode;
         }
 
         /**
@@ -38,14 +58,20 @@ public class MyBSTIterator<K extends Comparable<K>, V> extends MyBST<K, V> {
          * This method removes the last visited node from the tree.
          */
         public void remove() {
+            // can't remove last visited for the first node 
+            // or right after remove()
             if (lastVisited == null) {
                 throw new IllegalStateException();
             }
+            // if last visited has both children, 
+            // let next point to the last visited node
             if (lastVisited.getRight() != null &&
                     lastVisited.getLeft() != null) {
                 next = lastVisited;
             }
+            // remove last visited node
             MyBSTIterator.this.remove(lastVisited.getKey());
+            // let last visted node points to null
             lastVisited = null;
         }
     }
