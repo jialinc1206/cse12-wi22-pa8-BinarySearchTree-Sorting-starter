@@ -38,17 +38,11 @@ public class MyBSTIterator<K extends Comparable<K>, V> extends MyBST<K, V> {
         MyBSTNode<K, V> nextNode() {
             if(!hasNext())
                 throw new NoSuchElementException();
-            
-            if(lastVisited == null) {
-                lastVisited = this.next;
-                this.next = next.successor();
-                return next.predecessor();
-            }
-            MyBSTNode<K,V> lastNode = new MyBSTNode<K,V>(lastVisited.getKey(), 
-            lastVisited.getValue(), lastVisited.getParent());
-            lastVisited = this.next;
-            this.next = next.successor();
-            return lastNode;
+
+            this.lastVisited = this.next;
+            this.next = this.next.successor();
+
+            return this.lastVisited;
         }
 
         /**

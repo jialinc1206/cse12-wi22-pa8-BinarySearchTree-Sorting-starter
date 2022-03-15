@@ -16,6 +16,12 @@ public class CustomTester {
 
     /**
      * The setup method create a complete tree with height three
+     *
+     *           4
+     *         /  \
+     *       2     6
+     *     /  |   /
+     *    1   3  5
      */
     @Before
     public void setup(){
@@ -67,7 +73,7 @@ public class CustomTester {
     @Test
     public void testInsert3() {
         MyBST.MyBSTNode<Integer, Integer> root = Tree.root;
-        assertEquals((Integer)100, Tree.insert(3, 100));
+        assertEquals((Integer)30, Tree.insert(3, 100));
         assertEquals((Integer)100, root.getLeft().getRight().getValue());
     }
 
@@ -96,13 +102,18 @@ public class CustomTester {
     public void testNextNode() {
         MyBSTIterator<Integer, Integer> iterTree = new MyBSTIterator(); 
         MyBSTIterator<Integer, Integer>.MyBSTValueIterator vi = 
-        iterTree.new MyBSTValueIterator(null);
-        try {
-            vi.nextNode();
-            fail();
-        } catch (Exception NoSuchElementException) {
-            // exception caught
-        }
+        iterTree.new MyBSTValueIterator(Tree.root);
+        assertEquals((Integer)40, vi.next.getValue());
+        vi.nextNode();
+        assertEquals((Integer)50, vi.next.getValue());
+        assertEquals((Integer)40, vi.lastVisited.getValue());
+        vi.nextNode();
+        assertEquals((Integer)60, vi.next.getValue());
+        assertEquals((Integer)50, vi.lastVisited.getValue());
+        vi.nextNode();
+        assertEquals(null, vi.next);
+        assertEquals((Integer)60, vi.lastVisited.getValue());
+        //vi.nextNode();
     }
 
     // test book when start time < 0

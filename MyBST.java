@@ -55,8 +55,9 @@ public class MyBST<K extends Comparable<K>,V>{
                 }
                 // replace key's value if two key has the same value
                 else {
+                    V replace = curr.getValue();
                     curr.setValue(value);
-                    return value;
+                    return replace;
                 }
             }
         }
@@ -116,6 +117,7 @@ public class MyBST<K extends Comparable<K>,V>{
                         removeValue = parent.getRight().getValue();
                         parent.right = null;
                     }
+                    this.size--;
                 }
                 // remove node with left child
                 else if(curr.getRight() == null) {
@@ -126,11 +128,14 @@ public class MyBST<K extends Comparable<K>,V>{
                     else if(parent.getLeft() == curr) {
                         removeValue = parent.getLeft().getValue();
                         parent.left = curr.getLeft();
+                        curr.getLeft().setParent(parent);
                     }
                     else {
                         removeValue = parent.getRight().getValue();
                         parent.right = curr.getLeft();
+                        curr.getLeft().setParent(parent);
                     }
+                    this.size--;
                 }
                 // remove node with right child
                 else if(curr.getLeft() == null) {
@@ -141,24 +146,25 @@ public class MyBST<K extends Comparable<K>,V>{
                     else if(parent.getLeft() == curr) {
                         removeValue = parent.getLeft().getValue();
                         parent.left = curr.getRight();
+                        curr.getRight().setParent(parent);
                     }
                     else {
                         removeValue = parent.getRight().getValue();
                         parent.right = curr.getRight();
+                        curr.getRight().setParent(parent);
                     }
+                    this.size--;
                 }
                 // remove node with two children
                 else {
                     MyBSTNode<K,V> successor = curr.successor();
+
                     K sucKey = successor.getKey();
                     V sucVal = successor.getValue();
-                    MyBSTNode<K,V> sucPar = successor.getParent();
                     remove(successor.getKey());
-                    // assign curr's data with successor's data
                     removeValue = curr.getValue();
                     curr.setKey(sucKey);
                     curr.setValue(sucVal);
-                    curr.setParent(sucPar);
                 }
                 return removeValue; // node found
             }
@@ -396,5 +402,4 @@ public class MyBST<K extends Comparable<K>,V>{
                     this.getValue() == null ? NULL_STR : this.getValue());
         }
     }
-
 }
